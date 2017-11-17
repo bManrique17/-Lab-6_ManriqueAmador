@@ -18,7 +18,15 @@ public class Jugador {
 
     @Override
     public String toString() {
-        return nombre + " (" + posicion + ")";
+        return nombre + " | Precio: "+precio+"\nPosicion: "+posicion + " | Disponibilidad " + Valor(disponibilidad);
+    }
+    
+    public String Valor(Boolean b){
+        if(b){
+            return "Disp";
+        }else{
+            return "NoDisp";
+        }
     }
     
     public void setNombre(String nombre) {
