@@ -748,6 +748,7 @@ public class Principal extends javax.swing.JFrame {
                 }
             }
             modeloARBOL.reload();
+            JOptionPane.showMessageDialog(this, equipoSeleccionado.getNombre()+" a comprado a "+jugadorSeleccionado.getNombre());
         } else {
             JOptionPane.showMessageDialog(this, "No se puede comprar a " + jugadorSeleccionado.getNombre());
         }
