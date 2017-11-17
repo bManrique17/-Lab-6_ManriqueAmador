@@ -476,7 +476,7 @@ public class Principal extends javax.swing.JFrame {
         listaJugadores.setModel(new DefaultListModel());
         jScrollPane1.setViewportView(listaJugadores);
 
-        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(211, 64, 290, 200));
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(211, 64, 310, 200));
 
         listaEquipos.setModel(new DefaultListModel());
         jScrollPane2.setViewportView(listaEquipos);
@@ -578,8 +578,8 @@ public class Principal extends javax.swing.JFrame {
                         .addComponent(jLabel16))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel15)
@@ -726,7 +726,7 @@ public class Principal extends javax.swing.JFrame {
         DefaultListModel m = (DefaultListModel) listaJugadores.getModel();
         m.remove(listaJugadores.getSelectedIndex());
         listaJugadores.setModel(m);
-        listaJugadores.setModel(m);
+        listaJugadoresT.setModel(m);
     }//GEN-LAST:event_jb_eliminarJJMouseClicked
 
     private void jb_transferirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jb_transferirMouseClicked
@@ -745,10 +745,9 @@ public class Principal extends javax.swing.JFrame {
                 if (raiz.getChildAt(i).toString().equals(equipoSeleccionado.getNombre())) {
                     DefaultMutableTreeNode p = new DefaultMutableTreeNode(jugadorSeleccionado.getNombre() + "(" + jugadorSeleccionado.getPosicion() + ")");
                     ((DefaultMutableTreeNode) raiz.getChildAt(i)).add(p);
-                    System.out.println("dsfjkhaldsk");
                 }
             }
-            
+            modeloARBOL.reload();
         } else {
             JOptionPane.showMessageDialog(this, "No se puede comprar a " + jugadorSeleccionado.getNombre());
         }
@@ -778,8 +777,9 @@ public class Principal extends javax.swing.JFrame {
         DefaultTreeModel modeloARBOL = (DefaultTreeModel) arbol.getModel();
         DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modeloARBOL.getRoot();
         equipoSeleccionado = buscarEquipo(nodo_seleccionado.getParent());
-        equipoSeleccionado.listaJugadores.remove(buscarJugadorArreglo(((Equipo) nodo_seleccionado.getParent())));
+        equipoSeleccionado.listaJugadores.remove(buscarJugadorArreglo(nodo_seleccionado.getParent()));
         modeloARBOL.removeNodeFromParent(nodo_seleccionado);
+        modeloARBOL.reload();
         JOptionPane.showMessageDialog(this, "Removido");
     }//GEN-LAST:event_sacarEquipoActionPerformed
 
@@ -793,9 +793,12 @@ public class Principal extends javax.swing.JFrame {
         return null;
     }
 
-    public int buscarJugadorArreglo(Equipo actual) {
-        for (int i = 0; i < actual.listaJugadores.size(); i++) {
-            if (actual.listaJugadores.get(i) == jugadorSeleccionado) {
+    public int buscarJugadorArreglo(TreeNode actual) {
+        //actual es el equipo
+        Equipo x = buscarEquipo(actual);
+        
+        for (int i = 0; i < x.listaJugadores.size(); i++) {
+            if (x.listaJugadores.get(i) == jugadorSeleccionado) {
 
                 return i;
             }
