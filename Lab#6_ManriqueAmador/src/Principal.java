@@ -5,6 +5,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -260,9 +261,19 @@ public class Principal extends javax.swing.JFrame {
         );
 
         sacarEquipo.setText("Sacar de equipo");
+        sacarEquipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sacarEquipoActionPerformed(evt);
+            }
+        });
         menu.add(sacarEquipo);
 
         info.setText("Informacion");
+        info.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                infoActionPerformed(evt);
+            }
+        });
         menu.add(info);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -723,48 +734,85 @@ public class Principal extends javax.swing.JFrame {
         equipoSeleccionado = (Equipo) m.get(listaEquiposT.getSelectedIndex());
         DefaultListModel m2 = (DefaultListModel) listaJugadoresT.getModel();
         jugadorSeleccionado = (Jugador) m2.get(listaJugadoresT.getSelectedIndex());
-        if(jugadorSeleccionado.getPrecio()<equipoSeleccionado.getPresupuesto() && jugadorSeleccionado.getDisponibilidad()==true){
+        if (jugadorSeleccionado.getPrecio() < equipoSeleccionado.getPresupuesto() && jugadorSeleccionado.getDisponibilidad() == true) {
             equipoSeleccionado.listaJugadores.add(jugadorSeleccionado);
             jugadorSeleccionado.setDisponibilidad(false);
-            equipoSeleccionado.setPresupuesto(equipoSeleccionado.getPresupuesto()-jugadorSeleccionado.getPrecio());
+            equipoSeleccionado.setPresupuesto(equipoSeleccionado.getPresupuesto() - jugadorSeleccionado.getPrecio());
+            equipoSeleccionado.listaJugadores.add(jugadorSeleccionado);
             DefaultTreeModel modeloARBOL = (DefaultTreeModel) arbol.getModel();
             DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modeloARBOL.getRoot();
             for (int i = 0; i < raiz.getChildCount(); i++) {
-                if(raiz.getChildAt(i).toString().equals(equipoSeleccionado.getNombre())){
-                    DefaultMutableTreeNode p =  new DefaultMutableTreeNode(jugadorSeleccionado.getNombre()+"("+jugadorSeleccionado.getPosicion()+")");
-                    ((DefaultMutableTreeNode)raiz.getChildAt(i)).add(p);
+                if (raiz.getChildAt(i).toString().equals(equipoSeleccionado.getNombre())) {
+                    DefaultMutableTreeNode p = new DefaultMutableTreeNode(jugadorSeleccionado.getNombre() + "(" + jugadorSeleccionado.getPosicion() + ")");
+                    ((DefaultMutableTreeNode) raiz.getChildAt(i)).add(p);
                     System.out.println("dsfjkhaldsk");
                 }
             }
-        }else{
-            JOptionPane.showMessageDialog(this,"No se puede comprar a "+jugadorSeleccionado.getNombre());
+            
+        } else {
+            JOptionPane.showMessageDialog(this, "No se puede comprar a " + jugadorSeleccionado.getNombre());
         }
     }//GEN-LAST:event_jb_transferirMouseClicked
 
     private void arbolMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_arbolMouseClicked
-        if(evt.isMetaDown()){
+        if (evt.isMetaDown()) {
             int row = arbol.getClosestRowForLocation(evt.getX(), evt.getY());
             arbol.setSelectionRow(row);
             //determinar el tipo de objetocontenido en el nodo seleccionado
             Object v1 = arbol.getSelectionPath().getLastPathComponent();
             nodo_seleccionado = (DefaultMutableTreeNode) v1;
-            
-            
-                jugadorSeleccionado = buscarJugador((String) nodo_seleccionado.getUserObject());
-                menu.show(evt.getComponent(),evt.getX(),evt.getY());
-            
+            jugadorSeleccionado = buscarJugador((String) nodo_seleccionado.getUserObject());
+            menu.show(evt.getComponent(), evt.getX(), evt.getY());
+
         }
     }//GEN-LAST:event_arbolMouseClicked
-    
-    public Jugador buscarJugador(String nombre){
-        DefaultListModel m = (DefaultListModel) listaJugadores.getModel();
+
+    private void infoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_infoActionPerformed
+        JOptionPane.showMessageDialog(null, "INFORMACION\nNombre: " + jugadorSeleccionado.getNombre() + "\nPosicion: " + jugadorSeleccionado.getPosicion()
+                + "\nDisponible: " + jugadorSeleccionado.getDisponibilidad() + "\nHabilidad: " + jugadorSeleccionado.getHabilidad() + "\nTecnica: " + jugadorSeleccionado.getTecnica()
+                + "\nResistencia: " + jugadorSeleccionado.getResistencia());
+    }//GEN-LAST:event_infoActionPerformed
+
+    private void sacarEquipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sacarEquipoActionPerformed
+        jugadorSeleccionado.setDisponibilidad(true);
+        DefaultTreeModel modeloARBOL = (DefaultTreeModel) arbol.getModel();
+        DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modeloARBOL.getRoot();
+        equipoSeleccionado = buscarEquipo(nodo_seleccionado.getParent());
+        equipoSeleccionado.listaJugadores.remove(buscarJugadorArreglo(((Equipo) nodo_seleccionado.getParent())));
+        modeloARBOL.removeNodeFromParent(nodo_seleccionado);
+        JOptionPane.showMessageDialog(this, "Removido");
+    }//GEN-LAST:event_sacarEquipoActionPerformed
+
+    public Equipo buscarEquipo(TreeNode equipo) {
+        DefaultListModel m = (DefaultListModel) listaEquipos.getModel();
         for (int i = 0; i < m.getSize(); i++) {
-            if(((Jugador)m.getElementAt(i)).getNombre().equals(nombre.substring(0,nombre.indexOf("("))))
-                return ((Jugador)m.getElementAt(i));
+            if (((Equipo) m.getElementAt(i)).getNombre().equals(equipo.toString())) {
+                return ((Equipo) m.getElementAt(i));
+            }
         }
         return null;
     }
-    
+
+    public int buscarJugadorArreglo(Equipo actual) {
+        for (int i = 0; i < actual.listaJugadores.size(); i++) {
+            if (actual.listaJugadores.get(i) == jugadorSeleccionado) {
+
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    public Jugador buscarJugador(String nombre) {
+        DefaultListModel m = (DefaultListModel) listaJugadores.getModel();
+        for (int i = 0; i < m.getSize(); i++) {
+            if (((Jugador) m.getElementAt(i)).getNombre().equals(nombre.substring(0, nombre.indexOf("(")))) {
+                return ((Jugador) m.getElementAt(i));
+            }
+        }
+        return null;
+    }
+
     /**
      * @param args the command line arguments
      */

@@ -308,11 +308,17 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Sacar de equipo"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sacarEquipoActionPerformed"/>
+          </Events>
         </MenuItem>
         <MenuItem class="javax.swing.JMenuItem" name="info">
           <Properties>
             <Property name="text" type="java.lang.String" value="Informacion"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="infoActionPerformed"/>
+          </Events>
         </MenuItem>
       </SubComponents>
     </Container>
