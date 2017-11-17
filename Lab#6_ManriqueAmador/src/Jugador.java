@@ -18,14 +18,14 @@ public class Jugador {
 
     @Override
     public String toString() {
-        return nombre + " | Precio: "+precio+"\nPosicion: "+posicion + " | Disponibilidad " + Valor(disponibilidad);
+        return nombre + " | Precio: "+precio+" | Posicion: "+posicion + " | Disp: " + Valor(disponibilidad);
     }
     
     public String Valor(Boolean b){
         if(b){
-            return "Disp";
+            return "SI";
         }else{
-            return "NoDisp";
+            return "NO";
         }
     }
     
@@ -72,7 +72,7 @@ public class Jugador {
         return precio;
     }
 
-    public boolean isDisponibilidad() {
+    public boolean getDisponibilidad() {
         return disponibilidad;
     }
 
