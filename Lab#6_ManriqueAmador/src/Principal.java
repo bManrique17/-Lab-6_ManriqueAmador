@@ -61,6 +61,9 @@ public class Principal extends javax.swing.JFrame {
         jb_modificarJugador = new javax.swing.JButton();
         jLabel30 = new javax.swing.JLabel();
         Mdisp = new javax.swing.JCheckBox();
+        menu = new javax.swing.JPopupMenu();
+        sacarEquipo = new javax.swing.JMenuItem();
+        info = new javax.swing.JMenuItem();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
@@ -255,6 +258,12 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(jb_modificarJugador)
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
+
+        sacarEquipo.setText("Sacar de equipo");
+        menu.add(sacarEquipo);
+
+        info.setText("Informacion");
+        menu.add(info);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -499,6 +508,11 @@ public class Principal extends javax.swing.JFrame {
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Liga Española");
         arbol.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        arbol.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                arbolMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(arbol);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -620,7 +634,7 @@ public class Principal extends javax.swing.JFrame {
         DefaultTreeModel m = (DefaultTreeModel) arbol.getModel();
         DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) m.getRoot();
         DefaultMutableTreeNode nodo_equipo;
-        nodo_equipo = new DefaultMutableTreeNode(temp);
+        nodo_equipo = new DefaultMutableTreeNode(temp.getNombre());
         raiz.add(nodo_equipo);
         m.reload();
 
@@ -716,8 +730,8 @@ public class Principal extends javax.swing.JFrame {
             DefaultTreeModel modeloARBOL = (DefaultTreeModel) arbol.getModel();
             DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modeloARBOL.getRoot();
             for (int i = 0; i < raiz.getChildCount(); i++) {
-                if(((Equipo)raiz.getChildAt(i)).getNombre().equals(equipoSeleccionado.getNombre())){
-                    DefaultMutableTreeNode p =  new DefaultMutableTreeNode(jugadorSeleccionado);
+                if(raiz.getChildAt(i).toString().equals(equipoSeleccionado.getNombre())){
+                    DefaultMutableTreeNode p =  new DefaultMutableTreeNode(jugadorSeleccionado.getNombre()+"("+jugadorSeleccionado.getPosicion()+")");
                     ((DefaultMutableTreeNode)raiz.getChildAt(i)).add(p);
                     System.out.println("dsfjkhaldsk");
                 }
@@ -727,6 +741,30 @@ public class Principal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jb_transferirMouseClicked
 
+    private void arbolMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_arbolMouseClicked
+        if(evt.isMetaDown()){
+            int row = arbol.getClosestRowForLocation(evt.getX(), evt.getY());
+            arbol.setSelectionRow(row);
+            //determinar el tipo de objetocontenido en el nodo seleccionado
+            Object v1 = arbol.getSelectionPath().getLastPathComponent();
+            nodo_seleccionado = (DefaultMutableTreeNode) v1;
+            
+            
+                jugadorSeleccionado = buscarJugador((String) nodo_seleccionado.getUserObject());
+                menu.show(evt.getComponent(),evt.getX(),evt.getY());
+            
+        }
+    }//GEN-LAST:event_arbolMouseClicked
+    
+    public Jugador buscarJugador(String nombre){
+        DefaultListModel m = (DefaultListModel) listaJugadores.getModel();
+        for (int i = 0; i < m.getSize(); i++) {
+            if(((Jugador)m.getElementAt(i)).getNombre().equals(nombre.substring(0,nombre.indexOf("("))))
+                return ((Jugador)m.getElementAt(i));
+        }
+        return null;
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -770,6 +808,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cb_modPosicionJ;
     private javax.swing.JComboBox<String> cb_posicion;
     private javax.swing.JCheckBox disp;
+    private javax.swing.JMenuItem info;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -824,6 +863,8 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JList<String> listaEquiposT;
     private javax.swing.JList<String> listaJugadores;
     private javax.swing.JList<String> listaJugadoresT;
+    private javax.swing.JPopupMenu menu;
+    private javax.swing.JMenuItem sacarEquipo;
     private javax.swing.JSpinner sp_copas;
     private javax.swing.JSpinner sp_habilidad;
     private javax.swing.JSpinner sp_modCopas;
@@ -845,5 +886,6 @@ public class Principal extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     Equipo equipoSeleccionado;
     Jugador jugadorSeleccionado;
+    DefaultMutableTreeNode nodo_seleccionado;
 
 }

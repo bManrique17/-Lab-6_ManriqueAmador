@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Equipo {
     private String nombre,estadio;
     private double presupuesto;
-    private int copas;
+    private int copas,bandera;
     ArrayList<Jugador> listaJugadores = new ArrayList();;
 
     public Equipo(String nombre, String estadio, double presupuesto, int copas) {
@@ -13,11 +13,15 @@ public class Equipo {
         this.estadio = estadio;
         this.presupuesto = presupuesto;
         this.copas = copas;
+        this.bandera = 0;
     }
 
     @Override
     public String toString() {
-        return nombre + "| Copas: "+copas;
+        if(bandera==0)
+            return nombre + "| Copas: "+copas;
+        else
+            return nombre;
     }
     
     

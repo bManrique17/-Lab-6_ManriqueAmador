@@ -4,7 +4,7 @@ public class Jugador {
     private String nombre,posicion;
     private double precio;
     private boolean disponibilidad;
-    private int habilidad,tecnica,resistencia;
+    private int habilidad,tecnica,resistencia,bandera;
 
     public Jugador(String nombre, String posicion, double precio, boolean disponibilidad, int habilidad, int tecnica, int resistencia) {
         this.nombre = nombre;
@@ -14,11 +14,20 @@ public class Jugador {
         this.habilidad = habilidad;
         this.tecnica = tecnica;
         this.resistencia = resistencia;
+        this.bandera = 0;
     }
-
     @Override
     public String toString() {
+        if(bandera == 0){
         return nombre + " | Precio: "+precio+" | Posicion: "+posicion + " | Disp: " + Valor(disponibilidad);
+        }
+        else{
+            return nombre + " ("+posicion+")";
+        }
+    }
+
+    public void setBandera(int bandera) {
+        this.bandera = bandera;
     }
     
     public String Valor(Boolean b){
